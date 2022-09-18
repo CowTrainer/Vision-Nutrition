@@ -32,6 +32,7 @@ const theme = createTheme();
 export default function Album() {
 
   const [recipes, setRecipes] = useState([]);
+  const [status, setStatus] = useState();
   
   const [file, setFile] = useState("https://getstamped.co.uk/wp-content/uploads/WebsiteAssets/Placeholder.jpg");
   function handleChange(e) {
@@ -41,6 +42,7 @@ export default function Album() {
   const handleSubmit = (e) => {
     e.preventDefault()
     const formData = new FormData(e.target);
+    setStatus("fetching data")
     const Getitems = async() => {
       await fetch('/getitems', {
         method: 'POST',
@@ -49,6 +51,7 @@ export default function Album() {
         resp.json().then(data => {
           setRecipes(data)
           console.log(data)
+          setStatus("fetch complete")
         })
       });
     }
@@ -108,6 +111,7 @@ export default function Album() {
                 spacing={2}
                 justifyContent="center"
               >
+                <p>{status}</p>
                 <Button type = "submit" variant="contained">Get recipes!</Button>
               </Stack>
             </form>
