@@ -2,6 +2,8 @@ from keras.models import load_model
 from PIL import Image, ImageOps, ImageDraw
 import numpy as np
 from flask import Flask, request
+from recipehelper import allrecipes
+import json
 
 # Load the model
 model = load_model('keras_model.h5')
@@ -21,6 +23,8 @@ def getitems():
     width, height = im.size
 
     ingredients=set()
+
+    resultImage=im
 
     for i in range(1, 4):
         subSize=i
@@ -48,7 +52,10 @@ def getitems():
                 for i in range(len(prediction[0])):
                     cur = prediction[0][i]
                     if (cur>=0.95):
+                        if (ind[i] not in ingredients):
+                            draw = ImageDraw.Draw(resultImage)
+                            draw.ellipse((x, y, x+width//subSize, y+height//subSize), outline="red",
+                                    width=3)
                         ingredients.add(ind[i])
-
-    print(ingredients)
-    return "hello"
+    return(json.dumps(allrecipes('',ingredients,['chicken', 'beef', 'lamb'])))
+    

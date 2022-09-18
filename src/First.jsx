@@ -11,6 +11,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Recipe from './Recipe';
+
 
 function Copyright() {
   return (
@@ -28,25 +30,27 @@ function Copyright() {
 const theme = createTheme();
 
 export default function Album() {
+
+  const [recipes, setRecipes] = useState([]);
   
   const [file, setFile] = useState("https://getstamped.co.uk/wp-content/uploads/WebsiteAssets/Placeholder.jpg");
   function handleChange(e) {
-    console.log(e.target.files);
     setFile(URL.createObjectURL(e.target.files[0]));
-    console.log(URL.createObjectURL(e.target.files[0]))
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
     const formData = new FormData(e.target);
-    console.log(formData)
     const Getitems = async() => {
       await fetch('/getitems', {
         method: 'POST',
         body: formData
       }).then(resp => {
-        resp.json().then(data => {console.log(data)})
-      })
+        resp.json().then(data => {
+          setRecipes(data)
+          console.log(data)
+        })
+      });
     }
     Getitems();
   }
@@ -71,22 +75,16 @@ export default function Album() {
           }}
         >
           <Container maxWidth="sm">
-            <Typography
-              component="h1"
-              variant="h2"
-              align="center"
-              color="text.primary"
-              gutterBottom
-            >
-              Vision Nutrition
-            </Typography>
+            <div>
+              <img class = "center" src = "https://i.imgur.com/PJu7Hrh.png"></img>
+            </div>
             <Typography variant="h5" align="center" color="text.secondary" paragraph>
               Find your next recipe fast, using a photo of some of your ingredients!
             </Typography>
-            <form onSubmit={handleSubmit} enctype="multipart/form-data">
+            <form onSubmit={handleSubmit} encType="multipart/form-data">
               <Container
                 align="center">
-                  <IconButton color="primary" aria-label="upload picture" component="label" disableRipple ="true">
+                  <IconButton color="primary" aria-label="upload picture" component="label" disableRipple = {true}>
                     <div className="input-group">
                         <input hidden type="file" id="image" name="file" 
                         accept="image/*" className="file-custom" onChange={handleChange}/>
@@ -103,7 +101,6 @@ export default function Album() {
                       src={file}
                     />
                   </IconButton>
-                
               </Container>
               <Stack
                 sx={{ pt: 4 }}
@@ -116,6 +113,18 @@ export default function Album() {
             </form>
           </Container>
         </Box>
+        <div className = "recipes">
+        {recipes.map(recipe => (
+          <Recipe
+            key={recipe.name}
+            title={recipe.name}
+            cooktime="25 min"
+            link={recipe.url}
+            image={recipe.image}
+            ingredients={recipe.ingredients}
+          />
+        ))}
+        </div>
       </main>
       {/* Footer */}
       <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer">
