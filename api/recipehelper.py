@@ -36,7 +36,7 @@ class Scraper:
         ret=[]
         articles = self.soup.find_all("div", class_= "card__recipe")
         info = self.soup.find_all('div', class_="card__detailsContainer")
-        for i in range(max(len(articles), 4)):
+        for i in range(min(len(articles), 4)):
             data={}
             
             name=articles[i].find("a", title=re.compile(''))['title']

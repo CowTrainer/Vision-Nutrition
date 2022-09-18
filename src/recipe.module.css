@@ -13,7 +13,11 @@
     min-width: 40%;
     font-family: 'Raleway', cursive;   
 }
-  
+
+.bigLink{
+    font-size: 100px
+}
+
 .image{
     border-radius: 10px;
     margin:0px 0px 20px 0px;

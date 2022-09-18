@@ -15,7 +15,7 @@ const Recipe = ({title,cooktime,image,ingredients,link}) =>{
   
             <img className={style.image} src={image} alt=""/>
 
-            <a href = {link}>Link to recipe</a>
+            <a href = {link} class = "bigLink">Link to recipe</a>
   
         </div>
     );
